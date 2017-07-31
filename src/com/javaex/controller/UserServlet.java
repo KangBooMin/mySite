@@ -39,6 +39,31 @@ public class UserServlet extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/joinsuccess.jsp");
 			rd.forward(request, response);
 			
+		}else if("modify".equals(actionName)) {
+			System.out.println("도착!");
+			String name = request.getParameter("name");
+			String password = request.getParameter("password");
+			String gender = request.getParameter("gender");
+			UserVo vo = new UserVo();
+			vo.setName(name);
+			vo.setPassword(password);
+			vo.setGender(gender);
+			
+			HttpSession session = request.getSession();
+			UserVo authUser = (UserVo)session.getAttribute("authUser");
+			
+			int no = authUser.getNo();
+			vo.setNo(no);
+			
+			UserDao dao = new UserDao();
+			dao.update(vo);
+			
+			authUser.setName(name);  //헤더에서 db까지 저장되고 바뀌는 글을 위해 설정 '--님 안녕하세요^^'
+			
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/main/index.jsp");
+			rd.forward(request, response);
+
+			
 		}else if("modifyform".equals(actionName)) {
 		
 			HttpSession session = request.getSession();
@@ -93,6 +118,8 @@ public class UserServlet extends HttpServlet {
 		
 	}
 
+	
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
