@@ -30,8 +30,7 @@ public class BoardDao {
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 
 			// 3. SQL문 준비 / 바인딩 / 실행
-			String query = "select board.no, title, content, hit, reg_date, user_no, name " + "from users, board "
-					+ "where users.no = board.USER_NO order by board.no desc";
+			String query = "select b.no, title, content, hit, reg_date, user_no, name from users u, board b where u.no = b.user_no order by b.no desc";
 			pstmt = conn.prepareStatement(query);
 
 			rs = pstmt.executeQuery();
