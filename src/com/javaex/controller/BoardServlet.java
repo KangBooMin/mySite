@@ -56,6 +56,19 @@ public class BoardServlet extends HttpServlet {
 			request.setAttribute("vo", vo);
 			rd.forward(request, response);
 
+//수정 중 			
+		} else if ("modifyform".equals(actionName)) {
+			int boardNo = Integer.parseInt(request.getParameter("boardNo"));
+			
+			BoardDao dao = new BoardDao();
+			BoardVo vo = dao.read(boardNo);
+			vo.setContent(vo.getContent().replace("<br/>", "\n"));
+
+			RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/views/board/modifyform.jsp");
+			request.setAttribute("vo", vo);
+			rd.forward(request, response);
+//
+			
 		} else {
 			BoardDao dao = new BoardDao();
 			List<BoardVo> list = dao.getlist();
