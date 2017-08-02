@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -37,13 +38,16 @@
 							<td>${vo.name }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
-							<c:if test="${authUser.no == vo.userNo }">
-								<td><a href="/mysite/board?a=delete&boardNo=${vo.no }"
-									class="del">삭제</a></td>
-							</c:if>
-							<c:if test="${authUser.no != vo.userNo }">
-								<td></td>
-							</c:if>
+
+							<c:choose>
+								<c:when test="${authUser.no == vo.userNo }">
+									<td><a href="/mysite/board?a=delete&boardNo=${vo.no }"
+										class="del">삭제</a></td>
+								</c:when>
+								<c:otherwise>
+									<td></td>
+								</c:otherwise>
+							</c:choose>
 						</tr>
 					</c:forEach>
 				</table>

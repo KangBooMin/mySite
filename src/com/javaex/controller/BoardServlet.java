@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.javaex.dao.BoardDao;
+import com.javaex.dao.GuestbookDao;
 import com.javaex.util.WebUtil;
 import com.javaex.vo.BoardVo;
 
@@ -33,6 +34,14 @@ public class BoardServlet extends HttpServlet {
 
 			String path = "/mysite/board?a=read&no=" + boardNo;
 			response.sendRedirect(path);
+			
+		} else if ("delete".equals(actionName)) {                                       
+			int boardNo = Integer.parseInt(request.getParameter("boardNo"));
+			
+			BoardDao dao = new BoardDao();
+			dao.delete(boardNo);
+			
+			response.sendRedirect("/mysite/board");
 			
 		} else if ("writeform".equals(actionName)) {
 			WebUtil.forward(request, response, "WEB-INF/views/board/writeform.jsp");
