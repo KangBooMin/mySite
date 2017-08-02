@@ -2,7 +2,6 @@ package com.javaex.controller;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.javaex.dao.UserDao;
+import com.javaex.util.WebUtil;
 import com.javaex.vo.UserVo;
 
 @WebServlet("/user")
@@ -23,8 +23,8 @@ public class UserServlet extends HttpServlet {
 		String actionName = request.getParameter("a");
 		
 		if("joinform".equals(actionName)) {
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/joinform.jsp");
-			rd.forward(request, response);
+			
+			WebUtil.forward(request, response, "/WEB-INF/views/user/joinform.jsp");
 			
 		}else if("join".equals(actionName)) {
 			String name = request.getParameter("name");
@@ -36,9 +36,8 @@ public class UserServlet extends HttpServlet {
 			UserDao dao = new UserDao();
 			dao.insert(vo);
 			
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/joinsuccess.jsp");
-			rd.forward(request, response);
-			
+			WebUtil.forward(request, response, "/WEB-INF/views/user/joinsuccess.jsp");
+
 		}else if("modify".equals(actionName)) {
 			System.out.println("도착!");
 			String name = request.getParameter("name");
@@ -60,9 +59,7 @@ public class UserServlet extends HttpServlet {
 			
 			authUser.setName(name);  //헤더에서 db까지 저장되고 바뀌는 글을 위해 설정 '--님 안녕하세요^^'
 			
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/main/index.jsp");
-			rd.forward(request, response);
-
+			WebUtil.forward(request, response, "/WEB-INF/views/main/index.jsp");
 			
 		}else if("modifyform".equals(actionName)) {
 		
@@ -74,13 +71,12 @@ public class UserServlet extends HttpServlet {
 			UserVo userVo = dao.getUser(no);
 			
 			request.setAttribute("userVo", userVo);
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/modifyform.jsp");
-			rd.forward(request, response);
+			
+			WebUtil.forward(request, response, "/WEB-INF/views/user/modifyform.jsp");
 			
 		}else if("loginform".equals(actionName)) {
 			
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/user/loginform.jsp");
-			rd.forward(request, response);
+			WebUtil.forward(request, response, "/WEB-INF/views/user/loginform.jsp");
 			
 		}else if("login".equals(actionName)) {
 			
@@ -93,13 +89,13 @@ public class UserServlet extends HttpServlet {
 			
 			if(vo==null) {                                     //유지시키는 세션
 				System.out.println("실패");                     //그리고 메인으로 리다이렉트 
-				response.sendRedirect("/mysite/user?a=loginform&result=fail"); //로그인 실패시 fail이라는 꼬리표 달아주기
+				WebUtil.redirect(request, response, "/mysite/user?a=loginform&result=fail"); //로그인 실패시 fail이라는 꼬리표 달아주기
 			} else {
 				System.out.println("성공");
 				HttpSession session = request.getSession(true);
 				session.setAttribute("authUser", vo);
 				
-				response.sendRedirect("/mysite/main");
+				WebUtil.redirect(request, response, "/mysite/main");
 				return;                                         //
 			}
 			
@@ -108,18 +104,16 @@ public class UserServlet extends HttpServlet {
 			session.removeAttribute("authUser");
 			session.invalidate();
 			
-			response.sendRedirect("/mysite/main");
+			WebUtil.redirect(request, response, "/mysite/main");
 			
 		}else {
 			
-			response.sendRedirect("/mysite/main");
+			WebUtil.redirect(request, response, "/mysite/main");
 			
 		}
 		
 	}
 
-	
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

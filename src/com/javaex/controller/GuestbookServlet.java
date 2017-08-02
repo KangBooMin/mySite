@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.javaex.dao.GuestbookDao;
+import com.javaex.util.WebUtil;
 import com.javaex.vo.GuestbookVo;
 
 @WebServlet("/gb")
@@ -40,10 +40,7 @@ public class GuestbookServlet extends HttpServlet {
 			response.sendRedirect("/mysite/gb");
 			
 		} else if("deleteform".equals(actionName)){
-			//String no = (String)request.getAttribute("no");
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/guestbook/deleteform.jsp");
-			//request.setAttribute("no", no);
-			rd.forward(request, response);
+			WebUtil.forward(request, response, "/WEB-INF/views/guestbook/deleteform.jsp");
 			
 		} else if("delete".equals(actionName)) {
 			int no = Integer.parseInt((String)request.getParameter("no").trim());		//no 앞뒤로 null값이 있을 수 있음
@@ -52,14 +49,13 @@ public class GuestbookServlet extends HttpServlet {
 			GuestbookDao dao = new GuestbookDao();
 			dao.delete(no, password);
 			
-			response.sendRedirect("/mysite/gb");
+			WebUtil.redirect(request, response, "/mysite/gb");
 			
 		} else {
 			GuestbookDao dao = new GuestbookDao();
 			List<GuestbookVo> list = dao.getList();
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/guestbook/list.jsp");
 			request.setAttribute("list", list);
-			rd.forward(request, response);
+			WebUtil.forward(request, response, "/WEB-INF/views/guestbook/list.jsp");
 		}
 	}
 	

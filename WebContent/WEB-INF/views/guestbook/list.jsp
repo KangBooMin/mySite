@@ -1,11 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.javaex.vo.GuestbookVo" %>
-<%@ page import="com.javaex.dao.GuestbookDao" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
-<%
-	List<GuestbookVo> list = (ArrayList<GuestbookVo>)request.getAttribute("list");
-%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -42,22 +37,23 @@
 					</form>
 					<ul>
 						<li>
-						<%for(GuestbookVo vo : list){ %>
+						<c:forEach items="${list}" var="vo">
 							<table>
 								<tr>
-									<td>[<%=vo.getNo() %>]</td>
-									<td><%=vo.getName() %></td>
-									<td><%=vo.getRegDate() %></td>
-									<td><a href="/mysite/gb?a=deleteform&no=<%=vo.getNo()%>">삭제</a></td>
+									<td>[${vo.no}]</td>
+									<td>${vo.name}</td>
+									<td>${vo.regDate}</td>
+									<td><a href="/mysite/gb?a=deleteform&no=${vo.no}">삭제</a></td>
 								</tr>
 								<tr>
 									<td colspan=4>
-									<%=vo.getContent().replace("\n", "<br/>") %>
+									<%-- <%=vo.getContent().replace("\n", "<br/>") %> --%>
+									${vo.content}
 									</td>
 								</tr>
 							</table>
 							<br>
-						<%} %>
+						</c:forEach>
 						</li>
 					</ul>
 					
